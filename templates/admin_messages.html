@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Сайтаар ирүүлсэн холбоо барих зурвасууд.">
+    <title>Холбоо барих зурвас | Админ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v=14) }}">
+</head>
+<body>
+    {% include "_header.html" %}
+    <main class="admin-page">
+        <div class="admin-heading">
+            <span class="eyebrow blue">УДИРДЛАГА</span>
+            <h2>Холбоо барих зурвас</h2>
+            <p>Сайтын холбоо барих маягтаар ирүүлсэн хүсэлтүүд.</p>
+            <a class="text-link" href="{{ url_for('admin') }}">← Админ самбар руу буцах</a>
+        </div>
+        {% include "_flashes.html" %}
+        <section class="admin-section">
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Нэр</th>
+                            <th>Холбоо барих</th>
+                            <th>Зурвас</th>
+                            <th>Ирсэн огноо</th>
+                            <th>Үйлдэл</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for message in messages %}
+                        <tr>
+                            <td>{{ message.name }}</td>
+                            <td>
+                                <a class="text-link" href="mailto:{{ message.email }}">{{ message.email }}</a><br>
+                                <a class="text-link" href="tel:{{ message.phone }}">{{ message.phone }}</a>
+                            </td>
+                            <td class="contact-message-cell">{{ message.message }}</td>
+                            <td>{{ message.created_at }}</td>
+                            <td>
+                                <form action="{{ url_for('delete_contact_message', message_id=message.id) }}" method="post" onsubmit="return confirm('Энэ зурвасыг устгах уу?');">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                    <button class="admin-button danger" type="submit">Устгах</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="5">Одоогоор ирсэн зурвас алга.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

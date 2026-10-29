@@ -1,0 +1,20 @@
+<section class="auth-card" id="register" aria-labelledby="register-title">
+    <span class="eyebrow blue">ШИНЭ БҮРТГЭЛ</span>
+    <h2 id="register-title">Бүртгүүлэх</h2>
+    <p class="auth-description">Нэвтрэх нэр, Gmail болон утасны дугаараа бүртгүүлнэ үү.</p>
+    <form class="auth-form" method="post" action="{{ url_for('register') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <label for="register-username">Нэвтрэх нэр</label>
+        <input id="register-username" name="username" type="text" minlength="3" maxlength="32" pattern="[A-Za-z0-9_.-]{3,32}" autocomplete="username" value="{{ form_data.get('username', '') }}" required>
+        <label for="register-email">Gmail / имэйл</label>
+        <input id="register-email" name="email" type="email" maxlength="254" autocomplete="email" value="{{ form_data.get('email', '') }}" required>
+        <label for="register-phone">Утасны дугаар</label>
+        <input id="register-phone" name="phone" type="tel" minlength="8" maxlength="20" pattern="[0-9+(). -]{8,20}" placeholder="99112233 эсвэл +976 99112233" autocomplete="tel" value="{{ form_data.get('phone', '') }}" required>
+        <label for="register-password">Нууц үг (10-аас доошгүй тэмдэгт)</label>
+        <input id="register-password" name="password" type="password" minlength="10" maxlength="128" autocomplete="new-password" required>
+        <label for="register-password-confirmation">Нууц үг давтах</label>
+        <input id="register-password-confirmation" name="password_confirmation" type="password" minlength="10" maxlength="128" autocomplete="new-password" required>
+        <button class="button" type="submit">Бүртгэл үүсгэх</button>
+    </form>
+    <p class="auth-switch">Бүртгэлтэй юу? <a href="{{ url_for('index', _anchor='login') }}">Нэвтрэх</a></p>
+</section>

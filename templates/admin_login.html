@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Админ самбарт аюулгүй нэвтрэх.">
+    <title>Админ нэвтрэх | Мэргэжлийн сургалт</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v=14) }}">
+</head>
+<body>
+    {% include "_header.html" %}
+    <main class="section admin-login-page">
+        {% include "_flashes.html" %}
+        <section class="auth-card" aria-labelledby="admin-login-title">
+            <span class="eyebrow blue">ЗӨВХӨН АДМИН</span>
+            <h2 id="admin-login-title">Админ самбарт нэвтрэх</h2>
+            <p class="auth-description">Админы хэрэглэгчийн нэр, нууц үгээ оруулна уу.</p>
+            <form class="auth-form" method="post" action="{{ url_for('admin_login') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <input type="hidden" name="next" value="{{ next_url }}">
+                <label for="admin-username">Админы нэр</label>
+                <input id="admin-username" name="username" type="text" maxlength="32" autocomplete="username" autocapitalize="none" required autofocus>
+                <label for="admin-password">Нууц үг</label>
+                <input id="admin-password" name="password" type="password" maxlength="128" autocomplete="current-password" required>
+                <button class="button" type="submit">Админаар нэвтрэх</button>
+            </form>
+            <p class="auth-switch"><a href="{{ url_for('index') }}">← Нүүр хуудас руу буцах</a></p>
+        </section>
+    </main>
+</body>
+</html>

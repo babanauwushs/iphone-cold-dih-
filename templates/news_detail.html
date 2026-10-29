@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ article.summary }}">
+    <title>{{ article.title }} | Мэдээ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v=14) }}">
+</head>
+<body>
+    {% include "_header.html" %}
+    <main class="section">
+        <article class="news-article">
+            <span class="eyebrow blue">{{ "ЗАРЛАЛ" if article.category == "announcement" else "МЭДЭЭ" }}</span>
+            <h2>{{ article.title }}</h2>
+            <p class="news-article-meta">{{ article.created_at }}</p>
+            <p class="news-article-summary">{{ article.summary }}</p>
+            <div class="news-article-body">{{ article.body }}</div>
+            <a class="text-link" href="{{ url_for('news.index') }}">← Бүх мэдээ рүү буцах</a>
+        </article>
+    </main>
+    <footer class="footer">
+        <a class="footer-brand" href="{{ url_for('index') }}">Мэргэжлийн сургалт</a>
+        <p>© {{ current_year }} Бүх эрх хуулиар хамгаалагдсан.</p>
+        <a class="back-top" href="#top">Дээш буцах ↑</a>
+    </footer>
+</body>
+</html>

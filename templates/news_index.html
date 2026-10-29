@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Мэргэжлийн сургалтын мэдээ, мэдээлэл.">
+    <title>Мэдээ, мэдээлэл | Мэргэжлийн сургалт</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v=14) }}">
+</head>
+<body>
+    {% include "_header.html" %}
+    <main class="section news-section">
+        <div class="section-heading centered">
+            <span class="eyebrow blue">МЭДЭЭ, МЭДЭЭЛЭЛ</span>
+            <h2>Сургалтын байгууллагын мэдээ</h2>
+            <p>Шинэ мэдээлэл, зарлалууд.</p>
+        </div>
+        {% if articles %}
+        <div class="news-grid">
+            {% for article in articles %}
+            <a class="news-card" href="{{ url_for('news.detail', news_id=article.id) }}">
+                <div class="news-visual visual-{{ loop.cycle('one', 'two', 'three') }}">МЭДЭЭ</div>
+                <div class="news-body">
+                    <span class="news-category">{{ "ЗАРЛАЛ" if article.category == "announcement" else "МЭДЭЭ" }} · {{ article.created_at }}</span>
+                    <h3>{{ article.title }}</h3>
+                    <p>{{ article.summary }}</p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="news-empty">Одоогоор нийтлэгдсэн мэдээ алга.</p>
+        {% endif %}
+    </main>
+    <footer class="footer">
+        <a class="footer-brand" href="{{ url_for('index') }}">Мэргэжлийн сургалт</a>
+        <p>© {{ current_year }} Бүх эрх хуулиар хамгаалагдсан.</p>
+        <a class="back-top" href="#top">Дээш буцах ↑</a>
+    </footer>
+</body>
+</html>

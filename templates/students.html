@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Суралцагчийн хувийн хэсэг.">
+    <title>Суралцагчийн хэсэг | Мэргэжлийн сургалт</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v=14) }}">
+</head>
+<body>
+    {% include "_header.html" %}
+    <main class="section">
+        <section class="student-welcome" aria-labelledby="student-title">
+            <span class="eyebrow blue">СУРАЛЦАГЧИЙН ХЭСЭГ</span>
+            <h2 id="student-title">Сайн байна уу, {{ current_user.username }}!</h2>
+            <p>Та системд амжилттай нэвтэрлээ.</p>
+            <a class="text-link" href="{{ url_for('hutulbur') }}">Сургалтын хөтөлбөрүүд үзэх →</a>
+        </section>
+    </main>
+    <footer class="footer">
+        <a class="footer-brand" href="{{ url_for('index') }}">Мэргэжлийн сургалт</a>
+        <p>© {{ current_year }} Бүх эрх хуулиар хамгаалагдсан.</p>
+        <a class="back-top" href="#top">Дээш буцах ↑</a>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Мэдээ удирдах админ хуудас.">
+    <title>Мэдээ удирдах | Админ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v=14) }}">
+</head>
+<body>
+    {% include "_header.html" %}
+    <main class="admin-page">
+        <div class="admin-heading">
+            <span class="eyebrow blue">УДИРДЛАГА</span>
+            <h2>Мэдээ удирдах</h2>
+            <p>Мэдээ нэмэх, засах болон устгах.</p>
+            <a class="admin-button" href="{{ url_for('news.create') }}">Шинэ мэдээ/зарлал нэмэх</a>
+            <a class="text-link" href="{{ url_for('admin') }}">Админ самбар руу буцах</a>
+        </div>
+        {% include "_flashes.html" %}
+        <section class="admin-section">
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr><th>Гарчиг</th><th>Төрөл</th><th>Төлөв</th><th>Үүсгэсэн</th><th>Шинэчилсэн</th><th>Үйлдэл</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for article in articles %}
+                        <tr>
+                            <td><a class="text-link" href="{{ url_for('news.detail', news_id=article.id) }}">{{ article.title }}</a></td>
+                            <td>{{ "Зарлал" if article.category == "announcement" else "Мэдээ" }}</td>
+                            <td>{{ "Нийтэлсэн" if article.is_published else "Ноорог" }}</td>
+                            <td>{{ article.created_at }}</td>
+                            <td>{{ article.updated_at }}</td>
+                            <td>
+                                <div class="news-manage-actions">
+                                    <a class="admin-button" href="{{ url_for('news.edit', news_id=article.id) }}">Засах</a>
+                                    <form action="{{ url_for('news.update_status', news_id=article.id) }}" method="post">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                        <input type="hidden" name="is_published" value="{{ 0 if article.is_published else 1 }}">
+                                        <button class="admin-button" type="submit">{{ "Ноорог болгох" if article.is_published else "Нийтлэх" }}</button>
+                                    </form>
+                                    <form action="{{ url_for('news.delete', news_id=article.id) }}" method="post" onsubmit="return confirm('Энэ мэдээг устгах уу?');">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                        <button class="admin-button danger" type="submit">Устгах</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="6">Одоогоор мэдээ, зарлал алга.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

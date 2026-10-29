@@ -1,0 +1,16 @@
+<section class="auth-card" id="login" aria-labelledby="login-title">
+    <span class="eyebrow blue">ТАВТАЙ МОРИЛ</span>
+    <h2 id="login-title">Нэвтрэх</h2>
+    <p class="auth-description">Gmail, утасны дугаар эсвэл нэвтрэх нэрээ ашиглана уу.</p>
+    <form class="auth-form" method="post" action="{{ url_for('login') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="next" value="{{ next_url }}">
+        <label for="login-identifier">Gmail / утас / нэвтрэх нэр</label>
+        <input id="login-identifier" name="identifier" type="text" maxlength="254" autocomplete="username" autocapitalize="none" required>
+        <label for="login-password">Нууц үг</label>
+        <input id="login-password" name="password" type="password" autocomplete="current-password" required>
+        <button class="button" type="submit">Нэвтрэх</button>
+    </form>
+    <p class="auth-switch">Бүртгэлгүй юу? <a href="{{ url_for('index', _anchor='register') }}">Бүртгүүлэх</a></p>
+    <p class="auth-switch"><a href="{{ url_for('admin_login') }}">Админаар нэвтрэх</a></p>
+</section>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Админ самбарт мэдээ нэмэх эсвэл засах.">
+    <title>{{ page_title }} | Админ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v=14) }}">
+</head>
+<body>
+    {% include "_header.html" %}
+    <main class="section news-admin-page">
+        {% include "_flashes.html" %}
+        <section class="auth-card">
+            <span class="eyebrow blue">МЭДЭЭ УДИРДАХ</span>
+            <h2>{{ page_title }}</h2>
+            <form class="auth-form" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <label for="news-title">Гарчиг</label>
+                <input id="news-title" name="title" maxlength="150" value="{{ article.title }}" required>
+                <label for="news-category">Төрөл</label>
+                <select id="news-category" name="category" required>
+                    <option value="news" {% if article.category == "news" %}selected{% endif %}>Мэдээ</option>
+                    <option value="announcement" {% if article.category == "announcement" %}selected{% endif %}>Зарлал</option>
+                </select>
+                <label for="news-summary">Товч агуулга</label>
+                <textarea id="news-summary" name="summary" maxlength="300" rows="3" required>{{ article.summary }}</textarea>
+                <label for="news-body">Мэдээний дэлгэрэнгүй</label>
+                <textarea id="news-body" name="body" maxlength="20000" rows="10" required>{{ article.body }}</textarea>
+                <label for="news-status">Нийтлэлийн төлөв</label>
+                <select id="news-status" name="is_published" required>
+                    <option value="0" {% if not article.is_published %}selected{% endif %}>Ноорог болгон хадгалах</option>
+                    <option value="1" {% if article.is_published %}selected{% endif %}>Нийтлэх</option>
+                </select>
+                <button class="button" type="submit">Хадгалах</button>
+            </form>
+            <p class="auth-switch"><a href="{{ url_for('news.manage') }}">Мэдээний жагсаалт руу буцах</a></p>
+        </section>
+    </main>
+</body>
+</html>

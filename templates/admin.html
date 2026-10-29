@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Админ самбар.">
+    <title>Админ самбар | Мэргэжлийн сургалт</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v=14) }}">
+</head>
+<body>
+    {% include "_header.html" %}
+    <main class="admin-page">
+        <div class="admin-heading">
+            <span class="eyebrow blue">УДИРДЛАГА</span>
+            <h2>Админ самбар</h2>
+            <p>Хэрэглэгчид болон сургалтын хөтөлбөрийн мэдээллийг удирдана.</p>
+            <a class="admin-button admin-news-link" href="{{ url_for('admin_news') }}">Мэдээ удирдах</a>
+            <a class="admin-button admin-news-link" href="{{ url_for('admin_messages') }}">Холбоо барих зурвас</a>
+        </div>
+        {% include "_flashes.html" %}
+
+        <section class="admin-stats" aria-label="Ерөнхий статистик">
+            <article class="admin-stat"><span>Хэрэглэгч</span><strong>{{ statistics.users }}</strong></article>
+            <article class="admin-stat"><span>Админ</span><strong>{{ statistics.admins }}</strong></article>
+            <article class="admin-stat"><span>Хөтөлбөр</span><strong>{{ statistics.programs }}</strong></article>
+            <article class="admin-stat"><span>Холбоо барих зурвас</span><strong>{{ statistics.messages }}</strong></article>
+        </section>
+
+        <section class="admin-section" aria-labelledby="users-title">
+            <h3 id="users-title">Хэрэглэгчид</h3>
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Нэвтрэх нэр</th>
+                            <th>Имэйл</th>
+                            <th>Утас</th>
+                            <th>Эрх</th>
+                            <th>Бүртгүүлсэн</th>
+                            <th>Үйлдэл</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.username }}{% if user.id == current_user.id %} (та){% endif %}</td>
+                            <td>{{ user.email or "—" }}</td>
+                            <td>{{ user.phone or "—" }}</td>
+                            <td>
+                                <form class="admin-inline-form" action="{{ url_for('update_user_role', user_id=user.id) }}" method="post">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                    <label class="visually-hidden" for="role-{{ user.id }}">{{ user.username }} хэрэглэгчийн эрх</label>
+                                    <select id="role-{{ user.id }}" name="role">
+                                        <option value="student" {% if user.role == "student" %}selected{% endif %}>Суралцагч</option>
+                                        <option value="admin" {% if user.role == "admin" %}selected{% endif %}>Админ</option>
+                                    </select>
+                                    <button class="admin-button" type="submit">Хадгалах</button>
+                                </form>
+                            </td>
+                            <td>{{ user.created_at }}</td>
+                            <td>
+                                {% if user.id != current_user.id %}
+                                <form class="admin-inline-form" action="{{ url_for('delete_user', user_id=user.id) }}" method="post" onsubmit="return confirm('Энэ хэрэглэгчийг устгах уу?');">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                    <button class="admin-button danger" type="submit">Устгах</button>
+                                </form>
+                                {% else %}
+                                <span>Өөрийн бүртгэл</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="6">Бүртгэлтэй хэрэглэгч алга.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="admin-section" aria-labelledby="programs-title">
+            <h3 id="programs-title">Хөтөлбөрүүд</h3>
+            <div class="admin-program-grid">
+                {% for slug, program in programs.items() %}
+                <details class="admin-program-card">
+                    <summary>
+                        <span>{{ program.name }}</span>
+                        <span class="admin-program-toggle" aria-hidden="true"></span>
+                    </summary>
+                    <form class="admin-program-form" action="{{ url_for('update_program', slug=slug) }}" method="post">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <label for="program-icon-{{ slug }}">Тэмдэг</label>
+                        <input id="program-icon-{{ slug }}" name="icon" maxlength="16" value="{{ program.icon }}" required>
+                        <label for="program-name-{{ slug }}">Нэр</label>
+                        <input id="program-name-{{ slug }}" name="name" maxlength="100" value="{{ program.name }}" required>
+                        <label for="program-description-{{ slug }}">Тайлбар</label>
+                        <textarea id="program-description-{{ slug }}" name="description" maxlength="1000" rows="4" required>{{ program.description }}</textarea>
+                        <label for="program-skills-{{ slug }}">Ур чадварууд (мөр бүр нэг чадвар)</label>
+                        <textarea id="program-skills-{{ slug }}" name="skills" maxlength="2020" rows="6" required>{{ program.skills|join('\n') }}</textarea>
+                        <button class="admin-button" type="submit">Хөтөлбөр хадгалах</button>
+                    </form>
+                </details>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+</body>
+</html>
